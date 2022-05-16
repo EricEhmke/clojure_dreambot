@@ -6,8 +6,8 @@
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [local/client "1.0.0"]]
   :repositories {"local" "file:local"}
+  :main dreambot-test.core
+  :aot [dreambot-test.core]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}
-  :main dreambot-test.core
-  :aot [dreambot-test.core])
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
