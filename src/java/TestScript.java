@@ -1,7 +1,8 @@
 package testscriptshim;
 
-// import clojure.java.api.Clojure;
-// import clojure.lang.IFn;
+import clojure.java.api.Clojure;
+import clojure.lang.IFn;
+import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
@@ -13,6 +14,7 @@ public class TestScript extends AbstractScript {
 
   @Override
   public int onLoop() {
-    return 0;
+    MethodProvider.log("My first script");
+    return 1000;
   }
 }
