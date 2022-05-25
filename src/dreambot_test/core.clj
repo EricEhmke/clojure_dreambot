@@ -2,12 +2,15 @@
 
 (import [org.dreambot.api.methods MethodProvider])
 
-(defn onLoop
+(def wait_time (int 1000))
+
+(defn ^int onLoop
   []
   (MethodProvider/log "My test script")
-  1000)
+  wait_time)
 
 ;; actions
 ;; wait times
 ;; click locaitons
+
 ;; click frequencies

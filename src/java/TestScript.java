@@ -7,14 +7,11 @@ import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
 
-@ScriptManifest(name = "Test Script", description = "With Clojure",
-                author = "Developer Name", version = 1.0,
-                category = Category.WOODCUTTING, image = "")
+@ScriptManifest(name = "Test Script", description = "With Clojure", author = "Developer Name", version = 1.0, category = Category.WOODCUTTING, image = "")
 public class TestScript extends AbstractScript {
 
   static {
-    Thread.currentThread().setContextClassLoader(
-        TestScript.class.getClassLoader());
+    Thread.currentThread().setContextClassLoader(TestScript.class.getClassLoader());
     IFn require = Clojure.var("clojure.core", "require");
 
     require.invoke(Clojure.read("dreambot-test.core"));
@@ -23,9 +20,6 @@ public class TestScript extends AbstractScript {
 
   @Override
   public int onLoop() {
-    onLoopClojure.invoke();
-    return 1000;
-    // MethodProvider.log("My first script");
-    // return 1000;
+    return (int) onLoopClojure.invoke();
   }
 }
