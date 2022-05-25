@@ -16,12 +16,16 @@ public class TestScript extends AbstractScript {
     Thread.currentThread().setContextClassLoader(
         TestScript.class.getClassLoader());
     IFn require = Clojure.var("clojure.core", "require");
-    require.invoke(Clojure.read("dreambot_test.core"));
+
+    require.invoke(Clojure.read("dreambot-test.core"));
   }
+  IFn onLoopClojure = Clojure.var("dreambot-test.core", "onLoop");
 
   @Override
   public int onLoop() {
-    MethodProvider.log("My first script");
+    onLoopClojure.invoke();
     return 1000;
+    // MethodProvider.log("My first script");
+    // return 1000;
   }
 }

@@ -1,15 +1,13 @@
-(ns dreambot-test.core
-  (:gen-class
-   :name ^{org.dreambot.api.script.ScriptManifest
-           {:name "Test Script"
-            :description "A test script"
-            :author "Eric"
-            :version 1.0
-            :category org.dreambot.api.script.Category/WOODCUTTING
-            :image ""}} dreambot-test.core.TestScript
-   :extends org.dreambot.api.script.AbstractScript))
+(ns dreambot-test.core)
 
+(import [org.dreambot.api.methods MethodProvider])
 
-(defn -onLoop [this]
-  (org.dreambot.api.methods.MethodProvider/log "Hello from test script")
+(defn onLoop
+  []
+  (MethodProvider/log "My test script")
   1000)
+
+;; actions
+;; wait times
+;; click locaitons
+;; click frequencies
