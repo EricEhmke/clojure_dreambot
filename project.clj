@@ -7,7 +7,7 @@
                  [local/client "1.0.0"]]
   :repositories {"local" "file:local"}
   :main javacode.TestScript
-  :aot [dreambot-test.core dreambot-test.banknode]
+  :aot [dreambot-test.banknode]
   :target-path "target/%s"
   :*source-paths ["src/dreambot_test"]
   :java-source-paths ["src/javacode"]
