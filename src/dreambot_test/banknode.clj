@@ -1,10 +1,10 @@
 (ns dreambot-test.banknode)
 
-(import org.dreambot.api.script TaskNode)
+(import [org.dreambot.api.methods.container.impl Inventory])
 
 (defn BankNode
   []
-  (proxy [TaskNode] []
-    (priority (int 2))
-    (accept (.isFull getInventory))
-    (execute (.dropAll getInventory) (int 300))))
+  (proxy [org.dreambot.api.script.TaskNode] []
+    (priority [] (int 2))
+    (accept [] (Inventory/isFull))
+    (execute [] (Inventory/dropAll) (int 3000))))
