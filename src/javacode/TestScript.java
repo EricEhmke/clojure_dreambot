@@ -14,8 +14,8 @@ public class TestScript extends TaskScript {
   static {
     Thread.currentThread().setContextClassLoader(TestScript.class.getClassLoader());
     IFn require = Clojure.var("clojure.core", "require");
-    require.invoke(Clojure.read("dreambot-test.core"));
     require.invoke(Clojure.read("dreambot-test.banknode"));
+    require.invoke(Clojure.read("dreambot-test.fishnode"));
   }
   // IFn onLoopClojure = Clojure.var("dreambot-test.core", "onLoop");
 
@@ -24,12 +24,16 @@ public class TestScript extends TaskScript {
     return (TaskNode) BankNode.invoke();
   }
 
+  private TaskNode FishingTaskNode() {
+    IFn FishingNode = Clojure.var("dreambot-test.fishnode", "FishNode");
+    return (TaskNode) FishingNode.invoke();
+  }
+
   @Override
   public void onStart() {
     // One task node for each action (like banking, droping, fishing etc)
     // Task nodes should return their priority
-    // return (int) onLoopClojure.invoke();
     MethodProvider.log("Started ");
-    addNodes(BankTaskNode()); // TODO: add notes
+    addNodes(FishingTaskNode()); // TODO: add notes
   }
 }
