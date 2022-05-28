@@ -4,8 +4,9 @@ FIXME: description
 
 ## Installation
 
-Download from http://example.com/FIXME.
-
+If the dreambot client dependency is not detected correctly:
+Install the dreambot `client.jar` as a dependency with the command:
+`mvn deploy:deploy-file -Dfile=client.jar -DartifactId=client -Dversion=1.0.0 -DgroupId=local -Dpackaging=jar -Durl=file:repo`
 ## Usage
 
 FIXME: explanation
