@@ -42,7 +42,7 @@
       (do
         (MethodProvider/log "Fishing now")
         ;; BUG: Cannot cast ths .isAnimating bool to Condition
-        (MethodProvider/sleepWhile ((.isAnimating (Client/getLocalPlayer))) (int 20000) (int 6000)))
+        (MethodProvider/sleepWhile (.isAnimating (Client/getLocalPlayer)) (int 20000) (int 6000)))
 
       (MethodProvider/log "Not fishing for some reason")))
 
