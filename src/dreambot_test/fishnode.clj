@@ -24,30 +24,28 @@
   []
   (Inventory/contains "Lobster pot"))
 
+(defn lobsterFilter
+  "Filters lobster fishing spots"
+  []
+  (proxy [org.dreambot.api.methods.filter.Filter] []
+    (match [npc]
+      (if (nil? npc)
+        false
+        (.hasAction npc (into-array ["Cage"]))))))
+
 (defn goFishing
   "Fishs"
   []
-  ;; (let [fishingSpot (#(Client/getNPCs) (filter (fn [spot] (.hasAction spot "Cage"))))]
-  ;;   (if-not (nil? fishingSpot)
-  ;;     (.interact fishingSpot "Cage")
-  ;;     (MethodProvider/log "There was a problem interacting with the fishing spot")))
-  ;; (let [fishingSpot  #(NPCs/closest (fn [x] (.hasAction x "Cage")))]
-  ;;   (MethodProvider/log (str "Found fishing spot " fishingSpot))
-  ;;   (if-not (nil? fishingSpot)
-  ;;     (.interact #(fishingSpot) (:action "Cage"))
-  ;; (.interact #(NPCs/closest (fn [x] (.hasAction x "Cage"))))
-  (let [fishingSpot  (NPCs/closest (into-array ["Fishing spot"]))]
-  ;; (let [fishingSpot  (.closest (Client/getNPCs) (fn [x] (.hasAction x "Cage")))]
+  (let [fishingSpot  (NPCs/closest (lobsterFilter))]
     (MethodProvider/log (str "Found fishing spot " fishingSpot))
     (if (.interact fishingSpot "Cage")
       (do
         (MethodProvider/log "Fishing now")
-        (MethodProvider/sleepUntil (not (.isAnimating (Client/getLocalPlayer))) 50000))
-      (MethodProvider/log "Not fishing for some reason"))
-    ;; (if-not (nil? fishingSpot)
-    ;;   (.interact fishingSpot (:action "Cage"))
-    ;;   (MethodProvider/log "There was a problem interacting with the fishing spot"))
-    )
+        ;; BUG: Cannot cast ths .isAnimating bool to Condition
+        (MethodProvider/sleepWhile ((.isAnimating (Client/getLocalPlayer))) (int 20000) (int 6000)))
+
+      (MethodProvider/log "Not fishing for some reason")))
+
   (MethodProvider/sleep 5000))
 
 (defn FishNode
