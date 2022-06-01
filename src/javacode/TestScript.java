@@ -17,10 +17,11 @@ public class TestScript extends TaskScript {
     require.invoke(Clojure.read("dreambot-test.banknode"));
     require.invoke(Clojure.read("dreambot-test.fishnode"));
   }
-  // IFn onLoopClojure = Clojure.var("dreambot-test.core", "onLoop");
+  // TODO: Add vars generated on start to use in scripts (like changing values for
+  // mouse speeds or timeouts etc)
 
   private TaskNode BankTaskNode() {
-    IFn BankNode = Clojure.var("dreambot-test.banknode", "BankNode"); // TODO: Figure out how to import and use this
+    IFn BankNode = Clojure.var("dreambot-test.banknode", "BankNode");
     return (TaskNode) BankNode.invoke();
   }
 
@@ -34,6 +35,6 @@ public class TestScript extends TaskScript {
     // One task node for each action (like banking, droping, fishing etc)
     // Task nodes should return their priority
     MethodProvider.log("Started ");
-    addNodes(FishingTaskNode()); // TODO: add notes
+    addNodes(FishingTaskNode()); //
   }
 }

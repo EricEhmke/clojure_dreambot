@@ -24,12 +24,13 @@
   []
   (Inventory/contains "Lobster pot"))
 
-(defn isAnimating
+(defn isFishing
   "Returns a Condition which checks if the player is animating"
-  []
+  [fishingSpot]
   (reify Condition
     (verify [this]
       "Evaluates cond and returns a bool"
+      ;; TODO: Look at whether the fishing spot exists or if the player is animating
       (.isAnimating (Client/getLocalPlayer)))))
 
 (defn isTraveling
@@ -75,7 +76,7 @@
         (MethodProvider/log (str "Are we animating: " (.isAnimating (Client/getLocalPlayer))))
         ;;TODO: Some anti- logout stuff here
         ;;TODO: Explore checking if the fishing spot exists instead of animating. or both?
-        (MethodProvider/sleepWhile (isAnimating) (isAnimating) timeOutTime (int (pollingTime))))
+        (MethodProvider/sleepWhile (isFishing fishingSpot) (isFishing fishingSpot) timeOutTime (int (pollingTime))))
 
       (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
   (MethodProvider/log "One loop completed sleeping for a bit")
