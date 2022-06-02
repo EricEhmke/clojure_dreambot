@@ -30,8 +30,9 @@
   (reify Condition
     (verify [this]
       "Evaluates cond and returns a bool"
-      ;; TODO: Look at whether the fishing spot exists or if the player is animating
-      (.isAnimating (Client/getLocalPlayer)))))
+      (if (> 84 (rand-int 100)) ;; 84% of the time we notice if the fishing spot has moved. TODO: Make this dynamic some how
+        (.isAnimating (Client/getLocalPlayer))
+        (.exists fishingSpot)))))
 
 (defn isTraveling
   "Returns a Condition which checks if the player is traveling"
@@ -70,16 +71,13 @@
       (do
         (MethodProvider/log "Succesfully interacted with fishing spot...")
         (MethodProvider/sleep 1000) ;; Allows time for the client to register a character as moving
-        (MethodProvider/log (str "Are we traveling: " (.isMoving (Client/getLocalPlayer))))
         ;; I think I want to avoid sleepUntil because this will sleep forever in the event of a misclick.
         (MethodProvider/sleepWhile (isTraveling) (isTraveling) timeOutTime (int (pollingTime)))
-        (MethodProvider/log (str "Are we animating: " (.isAnimating (Client/getLocalPlayer))))
         ;;TODO: Some anti- logout stuff here
-        ;;TODO: Explore checking if the fishing spot exists instead of animating. or both?
         (MethodProvider/sleepWhile (isFishing fishingSpot) (isFishing fishingSpot) timeOutTime (int (pollingTime))))
 
       (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
-  (MethodProvider/log "One loop completed sleeping for a bit")
+  (MethodProvider/log "One fishing loop completed sleeping for a bit")
   (MethodProvider/sleep (int (pollingTime))))
 
 (defn FishNode
@@ -87,6 +85,6 @@
   (proxy [org.dreambot.api.script.TaskNode] []
     (priority [] (int 1))
     ;; Will return 'true' when these conditions are met
-    (accept [] (MethodProvider/log "Evaluating whether to fish")  (and (hasInventorySpace) (hasRequiredTool) (isAtFishingZone)))
+    (accept [] (MethodProvider/log "Evaluating whether to fish...")  (and (hasInventorySpace) (hasRequiredTool) (isAtFishingZone)))
     ;; What will execute when this node runs.
     (execute [] (goFishing) (int 3000))))

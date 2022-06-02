@@ -8,7 +8,7 @@ import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.script.TaskNode;
 import org.dreambot.api.script.impl.TaskScript;
 
-@ScriptManifest(name = "Test Script", description = "Task Script With nodes", author = "Developer Name", version = 1.0, category = Category.WOODCUTTING, image = "")
+@ScriptManifest(name = "Fishing Script", description = "Task Script With nodes", author = "Developer Name", version = 1.0, category = Category.WOODCUTTING, image = "")
 public class TestScript extends TaskScript {
 
   static {
@@ -16,6 +16,7 @@ public class TestScript extends TaskScript {
     IFn require = Clojure.var("clojure.core", "require");
     require.invoke(Clojure.read("dreambot-test.banknode"));
     require.invoke(Clojure.read("dreambot-test.fishnode"));
+    require.invoke(Clojure.read("dreambot-test.travelnode"));
   }
   // TODO: Add vars generated on start to use in scripts (like changing values for
   // mouse speeds or timeouts etc)
@@ -30,11 +31,16 @@ public class TestScript extends TaskScript {
     return (TaskNode) FishingNode.invoke();
   }
 
+  private TaskNode TravelNode() {
+    IFn TravelNode = Clojure.var("dreambot-test.travelnode", "TravelNode");
+    return (TaskNode) TravelNode.invoke();
+  }
+
   @Override
   public void onStart() {
     // One task node for each action (like banking, droping, fishing etc)
     // Task nodes should return their priority
-    MethodProvider.log("Started ");
-    addNodes(FishingTaskNode()); //
+    MethodProvider.log("Staring Fishing Script...");
+    addNodes(FishingTaskNode(), TravelNode()); //
   }
 }
