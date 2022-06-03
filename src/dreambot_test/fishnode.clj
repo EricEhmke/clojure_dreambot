@@ -1,5 +1,5 @@
 (ns dreambot-test.fishnode
-  (:use clojure.core.matrix.random))
+  (:require [dreambot-test.utils.utilities :as utils]))
 ;; Is there a way to pass a reference to the Client, Area etc into this and have it run? These functions are not pure
 (import
  [org.dreambot.api.methods.container.impl Inventory]
@@ -30,7 +30,7 @@
   (reify Condition
     (verify [this]
       "Evaluates cond and returns a bool"
-      (if (> 84 (rand-int 100)) ;; 84% of the time we notice if the fishing spot has moved. TODO: Make this dynamic some how
+      (if (< 84 (rand-int 100)) ;; 84% of the time we notice if the fishing spot has moved.
         (.isAnimating (Client/getLocalPlayer))
         (.exists fishingSpot)))))
 
@@ -51,17 +51,6 @@
         false
         (.hasAction npc (into-array ["Cage"]))))))
 
-(def timeOutTime (int 330000)) ;; 5.5 minutes
-
-(def pollingTime
-  "Generates a normally distrubted polling time along a guasian distribution"
-  (fn [] (let [pollTime (rand-gaussian 20000 10000)]
-           (if (< 200 pollTime)
-             pollTime
-             (recur)))))
-
-;; (def pollingTime (getPollingTime))
-
 (defn goFishing
   "Fishs"
   []
@@ -71,14 +60,13 @@
       (do
         (MethodProvider/log "Succesfully interacted with fishing spot...")
         (MethodProvider/sleep 1000) ;; Allows time for the client to register a character as moving
-        ;; I think I want to avoid sleepUntil because this will sleep forever in the event of a misclick.
-        (MethodProvider/sleepWhile (isTraveling) (isTraveling) timeOutTime (int (pollingTime)))
+        (MethodProvider/sleepWhile (isTraveling) (isTraveling) utils/timeOutTime (utils/pollingTime)))
         ;;TODO: Some anti- logout stuff here
-        (MethodProvider/sleepWhile (isFishing fishingSpot) (isFishing fishingSpot) timeOutTime (int (pollingTime))))
+      (MethodProvider/sleepWhile (isFishing fishingSpot) (isFishing fishingSpot) utils/timeOutTime (utils/pollingTime)))
 
-      (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
-  (MethodProvider/log "One fishing loop completed sleeping for a bit")
-  (MethodProvider/sleep (int (pollingTime))))
+    (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
+(MethodProvider/log "One fishing loop completed sleeping for a bit")
+(MethodProvider/sleep (utils/pollingTime))
 
 (defn FishNode
   []
@@ -87,4 +75,4 @@
     ;; Will return 'true' when these conditions are met
     (accept [] (MethodProvider/log "Evaluating whether to fish...")  (and (hasInventorySpace) (hasRequiredTool) (isAtFishingZone)))
     ;; What will execute when this node runs.
-    (execute [] (goFishing) (int 3000))))
+    (execute [] (goFishing) (utils/pollingTime))))

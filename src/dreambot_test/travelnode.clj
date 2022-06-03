@@ -1,5 +1,5 @@
 (ns dreambot-test.travelnode
-  (:use clojure.core.matrix.random))
+  (:require [dreambot-test.utils.utilities :as utils]))
 ;; TODO: In the future I want to pass a callback or something to this function. There will be too much duplciation doing it this way
 (import
  [org.dreambot.api.methods.container.impl Inventory]
@@ -27,17 +27,6 @@
       "Evaluates cond and returns a bool"
       (.isMoving (Client/getLocalPlayer)))))
 
-;; TODO these are values that can be passed in
-(def timeOutTime (int 330000)) ;; 5.5 minutes
-
-;; TODO these are values that can be passed in
-(def pollingTime
-  "Generates a normally distrubted polling time along a guasian distribution"
-  (fn [] (let [pollTime (rand-gaussian 20000 10000)]
-           (if (< 200 pollTime)
-             pollTime
-             (recur)))))
-
 (defn travelTo
   []
   ;;TODO implement logic for traveling
@@ -45,12 +34,11 @@
         travelFunc (fn [lastLoc]
                      (if (Bank/openClosest)
                        (do
-                         (MethodProvider/log "At bank")
-                         (MethodProvider/log "One travel loop completed.")
-                         (MethodProvider/sleep 10000))
+                         (MethodProvider/log "Arrived at bank...")
+                         (MethodProvider/sleep (utils/pollingTime)))
                        (do
                          (MethodProvider/log "Not at bank sleeping for sec")
-                         (MethodProvider/sleep 750) ;;TODO: Put a random small-ish number here
+                         (MethodProvider/sleep (utils/pollingTime 1.2 0.2))
                          (if (= lastLoc (currentLocation))
                            (MethodProvider/log "Aborting: character potentially stuck...")
                            (recur (.getTile (Client/getLocalPlayer)))))))]
@@ -63,4 +51,4 @@
     ;; Will return 'true' when these conditions are met
     (accept [] (MethodProvider/log "Evaluating whether to travel...") (and (inventoryIsFull)))
     ;; What will execute when this node runs.
-    (execute [] (travelTo) (int 3000))))
+    (execute [] (travelTo) (int 5000))))

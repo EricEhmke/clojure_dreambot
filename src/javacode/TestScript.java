@@ -17,6 +17,7 @@ public class TestScript extends TaskScript {
     require.invoke(Clojure.read("dreambot-test.banknode"));
     require.invoke(Clojure.read("dreambot-test.fishnode"));
     require.invoke(Clojure.read("dreambot-test.travelnode"));
+    require.invoke(Clojure.read("dreambot-test.utils.utilities"));
   }
   // TODO: Add vars generated on start to use in scripts (like changing values for
   // mouse speeds or timeouts etc)
@@ -36,10 +37,12 @@ public class TestScript extends TaskScript {
     return (TaskNode) TravelNode.invoke();
   }
 
+  // TODO: Call pollingTime and timeoutTime and pass these into the scripts
   @Override
   public void onStart() {
     // One task node for each action (like banking, droping, fishing etc)
     // Task nodes should return their priority
+
     MethodProvider.log("Staring Fishing Script...");
     addNodes(FishingTaskNode(), TravelNode()); //
   }
