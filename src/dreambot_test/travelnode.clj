@@ -29,7 +29,6 @@
 
 (defn travelTo
   []
-  ;;TODO implement logic for traveling
   (let [currentLocation (fn [] (.getTile (Client/getLocalPlayer)))
         travelFunc (fn [lastLoc]
                      (if (Bank/openClosest)
@@ -46,6 +45,7 @@
 
 (defn TravelNode
   []
+  ;; TODO: Be able to pass in a function that walks to/destination and criteria for evaluate
   (proxy [org.dreambot.api.script.TaskNode] []
     (priority [] (int 3))
     ;; Will return 'true' when these conditions are met
