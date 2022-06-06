@@ -13,12 +13,6 @@
   []
   (Inventory/isFull))
 
-;; (defn atDestination
-;;   "Checks if the player is at the given destination"
-;;   []
-;;   ;; Catherby bank
-;;   (.contains (new Area 2806 3441 2811 3438) (Client/getLocalPlayer)))
-
 (defn isTraveling
   "Returns a Condition which checks if the player is traveling"
   []
@@ -37,7 +31,7 @@
                          (MethodProvider/sleep (utils/pollingTime)))
                        (do
                          (MethodProvider/log "Not at bank sleeping for sec")
-                         (MethodProvider/sleep (utils/pollingTime 1.2 0.2))
+                         (MethodProvider/sleep (utils/pollingTime 1000 200))
                          (if (= lastLoc (currentLocation))
                            (MethodProvider/log "Aborting: character potentially stuck...")
                            (recur (.getTile (Client/getLocalPlayer)))))))]

@@ -19,8 +19,6 @@ public class TestScript extends TaskScript {
     require.invoke(Clojure.read("dreambot-test.travelnode"));
     require.invoke(Clojure.read("dreambot-test.utils.utilities"));
   }
-  // TODO: Add vars generated on start to use in scripts (like changing values for
-  // mouse speeds or timeouts etc)
 
   private TaskNode BankTaskNode() {
     IFn BankNode = Clojure.var("dreambot-test.banknode", "BankNode");
@@ -37,7 +35,6 @@ public class TestScript extends TaskScript {
     return (TaskNode) TravelNode.invoke();
   }
 
-  // TODO: Call pollingTime and timeoutTime and pass these into the scripts
   @Override
   public void onStart() {
     // One task node for each action (like banking, droping, fishing etc)

@@ -30,7 +30,7 @@
   (reify Condition
     (verify [this]
       "Evaluates cond and returns a bool"
-      (if (< 84 (rand-int 100)) ;; 84% of the time we notice if the fishing spot has moved.
+      (if (< 40 (rand-int 100)) ;; 40% of the time we notice if the fishing spot has moved.
         (.isAnimating (Client/getLocalPlayer))
         (.exists fishingSpot)))))
 
@@ -58,15 +58,16 @@
     (MethodProvider/log (str "Fishing spot located..."))
     (if (.interact fishingSpot "Cage")
       (do
-        (MethodProvider/log "Succesfully interacted with fishing spot...")
+        (MethodProvider/log "Interacted with fishing spot...")
+        (when (> 70 (rand-int 100)) (utils/moveMouseOutOfScreen))
         (MethodProvider/sleep 1000) ;; Allows time for the client to register a character as moving
-        (MethodProvider/sleepWhile (isTraveling) (isTraveling) utils/timeOutTime (utils/pollingTime)))
-        ;;TODO: Some anti- logout stuff here
-      (MethodProvider/sleepWhile (isFishing fishingSpot) (isFishing fishingSpot) utils/timeOutTime (utils/pollingTime)))
+        (MethodProvider/sleepWhile (isTraveling) (isTraveling) utils/timeOutTime (utils/pollingTime))
+        ;; TODO: potentially move mouse outside of screen here?
+        (MethodProvider/sleepWhile (isFishing fishingSpot) (utils/afkCondition '(isFishing fishingSpot)) utils/timeOutTime (utils/pollingTime 16000 5000)))
 
-    (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
-(MethodProvider/log "One fishing loop completed sleeping for a bit")
-(MethodProvider/sleep (utils/pollingTime))
+      (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
+
+  (MethodProvider/log "Completed one fishing loop..."))
 
 (defn FishNode
   []
