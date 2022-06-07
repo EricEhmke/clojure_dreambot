@@ -67,11 +67,3 @@
 ;; (defn swapTabs
 ;;   [tab1 tab2])
 
-(defn afkCondition
-  "Checks a conditional and peforms an anti-logout action if this conditional is false.
-  This is used for long actions that could run longer than the logout timer."
-  [conditional]
-  (MethodProvider/log "Peforming AFK Condition check")
-  (if (.verify conditional)
-    (do (antiLogout) conditional)
-    (conditional)))

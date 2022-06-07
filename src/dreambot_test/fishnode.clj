@@ -8,7 +8,8 @@
  [org.dreambot.api.input Mouse]
  [org.dreambot.api.methods.interactive NPCs]
  [org.dreambot.api.methods MethodProvider]
- [org.dreambot.api.utilities.impl Condition])
+ [org.dreambot.api.utilities.impl Condition]
+ [org.dreambot.api.methods.dialogues Dialogues])
 
 (defn isAtFishingZone
   "Checks whether the player is in the fishing zone"
@@ -68,9 +69,14 @@
         (while (.verify isFishing)
           (when (> (Client/getIdleTime) (utils/pollingTime 300000 200000))
             (utils/antiLogout))
-          (MethodProvider/sleep (utils/pollingTime))))
+          (MethodProvider/sleep (utils/pollingTime 16000 5000))))
 
       (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
+
+    ;; TODO: Dismiss prompts
+  (when (and (Dialogues/inDialogue) (Dialogues/canContinue))
+    (Dialogues/continueDialogue)
+    (MethodProvider/sleep (utils/pollingTime)))
 
   (MethodProvider/log "Completed one fishing loop..."))
 
