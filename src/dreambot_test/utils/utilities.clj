@@ -48,12 +48,11 @@
 (defn antiLogout
   "Performs an action to prevent logging out"
   []
+  (MethodProvider/log "Performing anti logout action...")
   (let [rand_val (rand-int 100)]
     (cond
       (< 80 rand_val) (randomMouseMovement)
       (>= 80 rand_val) (randomCameraSpin)))
-    ;; check idle time
-    ;; mouse getLastMouseMoveTime
     ;; either right click
     ;; spin
     ;; check a skill
@@ -72,7 +71,7 @@
   "Checks a conditional and peforms an anti-logout action if this conditional is false.
   This is used for long actions that could run longer than the logout timer."
   [conditional]
-  (MethodProvider/log (str "Polled an AFK condition " conditional))
+  (MethodProvider/log "Peforming AFK Condition check")
   (if (.verify conditional)
-    ((antiLogout) 'conditional)
-    conditional))
+    (do (antiLogout) conditional)
+    (conditional)))
