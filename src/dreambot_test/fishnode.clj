@@ -55,28 +55,32 @@
 
 (defn goFishing
   "Fishs"
-  []
-  (let [fishingSpot  (NPCs/closest (lobsterFilter))
-        isFishing (isFishing fishingSpot)]
-    (MethodProvider/log (str "Fishing spot located..."))
-    ;; TODO: Handle cases where there are no suitable fishing spots
-    (if (and (not (nil? fishingSpot)) (.interact fishingSpot "Cage"))
-      (do
-        (MethodProvider/log "Interacted with fishing spot...")
-        (when (> 70 (rand-int 100)) (utils/moveMouseOutOfScreen))
-        (MethodProvider/sleep 1000) ;; Allows time for the client to register a character as moving
-        (MethodProvider/sleepWhile (isTraveling) utils/timeOutTime (utils/pollingTime))
-        (while (.verify isFishing)
-          (when (> (Client/getIdleTime) (utils/pollingTime 300000 200000))
-            (utils/antiLogout))
-          (MethodProvider/sleep (utils/pollingTime 16000 5000))))
+  [destination]
+  ;; Check if not at fishing spot
+  (if (.contains destination (Client/getLocalPlayer))
+    (do
+      (let [fishingSpot  (NPCs/closest (lobsterFilter))
+            isFishing (isFishing fishingSpot)]
+        (MethodProvider/log (str "Fishing spot located..."))
+        ;; TODO: Handle cases where there are no suitable fishing spots
+        (if (and (not (nil? fishingSpot)) (.interact fishingSpot "Cage"))
+          (do
+            (MethodProvider/log "Interacted with fishing spot...")
+            (when (> 70 (rand-int 100)) (utils/moveMouseOutOfScreen))
+            (MethodProvider/sleep 1000) ;; Allows time for the client to register a character as moving
+            (MethodProvider/sleepWhile (isTraveling) utils/timeOutTime (utils/pollingTime))
+            (while (.verify isFishing)
+              (when (> (Client/getIdleTime) (utils/pollingTime 300000 200000))
+                (utils/antiLogout))
+              (MethodProvider/sleep (utils/pollingTime 16000 5000))))
 
-      (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
+          (MethodProvider/log "Found a fishing spot but failed to interact with it.")))
 
-    ;; TODO: Dismiss prompts
-  (when (and (Dialogues/inDialogue) (Dialogues/canContinue))
-    (Dialogues/continueDialogue)
-    (MethodProvider/sleep (utils/pollingTime)))
+      (when (and (Dialogues/inDialogue) (Dialogues/canContinue))
+        (Dialogues/continueDialogue)
+        (MethodProvider/sleep (utils/pollingTime))))
+    (utils/travelTo destination) ;;travel to fishing spot
+    )
 
   (MethodProvider/log "Completed one fishing loop..."))
 
@@ -85,6 +89,6 @@
   (proxy [org.dreambot.api.script.TaskNode] []
     (priority [] (int 1))
     ;; Will return 'true' when these conditions are met
-    (accept [] (MethodProvider/log "Evaluating whether to fish...")  (and (hasInventorySpace) (hasRequiredTool) (isAtFishingZone)))
+    (accept [] (MethodProvider/log "Evaluating whether to fish...")  (and (hasInventorySpace) (hasRequiredTool)))
     ;; What will execute when this node runs.
-    (execute [] (goFishing) (utils/pollingTime))))
+    (execute [] (goFishing (new Area 2833 3436 2861 3421)) (utils/pollingTime))))

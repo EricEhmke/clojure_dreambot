@@ -6,7 +6,8 @@
         [org.dreambot.api.methods.input Camera]
         [org.dreambot.api Client]
         [org.dreambot.api.methods.map Area]
-        [org.dreambot.api.methods MethodProvider])
+        [org.dreambot.api.methods MethodProvider]
+        [org.dreambot.api.methods.walking.impl Walking])
 
 (def timeOutTime (int 330000)) ;; 5.5 minutes
 
@@ -67,3 +68,18 @@
 ;; (defn swapTabs
 ;;   [tab1 tab2])
 
+(defn travelTo
+  [destination]
+  (let [currentLocation (fn [] (.getTile (Client/getLocalPlayer)))
+        travelFunc (fn [lastLoc]
+                     (if (.contains destination (Client/getLocalPlayer))
+                       (do
+                         (MethodProvider/log "Arrived at destination...")
+                         (MethodProvider/sleep (pollingTime)))
+                       (do
+                         (Walking/walk (.getRandomTile destination))
+                         (MethodProvider/sleep (pollingTime 1000 200))
+                         (if (= lastLoc (currentLocation))
+                           (MethodProvider/log "Aborting: character potentially stuck...")
+                           (recur (.getTile (Client/getLocalPlayer)))))))]
+    (travelFunc (currentLocation))))

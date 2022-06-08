@@ -41,6 +41,6 @@ public class TestScript extends TaskScript {
     // Task nodes should return their priority
 
     MethodProvider.log("Staring Fishing Script...");
-    addNodes(FishingTaskNode(), TravelNode()); //
+    addNodes(FishingTaskNode(), BankTaskNode()); //
   }
 }
