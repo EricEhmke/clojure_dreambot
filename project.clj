@@ -5,11 +5,11 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [local/client "1.0.0"]]
-  :repositories {"local" "file:local"}
-  :main java.testscriptshim
-  :aot [dreambot-test.core]
+  :repositories {"local" "file:repo"}
+  :main javacode.TestScript
+  :aot [dreambot-test.banknode dreambot-test.fishnode dreambot-test.travelnode]
   :target-path "target/%s"
   :*source-paths ["src/dreambot_test"]
-  :java-source-paths ["src/java"]
+  :java-source-paths ["src/javacode"]
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
