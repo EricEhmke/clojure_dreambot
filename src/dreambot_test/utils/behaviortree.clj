@@ -1,7 +1,7 @@
-(ns dreambot-test.utils.behaviortree)
+(ns dreambot-test.utils.behaviortree
+  (:require [dreambot-test.utils.walking :as walking]))
 
-;; Sequence (evaluated in order, returns true or false)
-;; a sequence is just a (and (leaf1 leaf2 leaf3)) since and stops at the first falsy value. It returns the last value it evaluates
-
-;; action (a leaf, performs an action this is just a node based on abstractscript)
-;; selection (perform a random one) this is just (rand-nth)
+(defn travelFallback
+  "A fallback node for traveling to a destination"
+  [destination]
+  (or (walking/isAtDestination destination) (walking/walkNext destination)))
