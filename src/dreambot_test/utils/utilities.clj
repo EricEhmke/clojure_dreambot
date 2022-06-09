@@ -67,6 +67,22 @@
 
 ;; (defn swapTabs
 ;;   [tab1 tab2])
+;;
+(defn isAtDestination
+  "Checks whether the player is in the fishing zone"
+  [destination]
+  (.contains destination (Client/getLocalPlayer)))
+
+(defn walkNext
+  "Makes a single action to walk to the destination"
+  [destination]
+  (let [walked (Walking/walk (.getRandomTile destination))]
+    (MethodProvider/sleep (pollingTime 1000 200))
+    walked))
+
+(defn travelFallback
+  [destination]
+  (or (isAtDestination destination) (walkNext destination)))
 
 (defn travelTo
   [destination]

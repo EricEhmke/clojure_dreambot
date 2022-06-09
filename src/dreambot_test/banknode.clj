@@ -9,8 +9,8 @@
  [org.dreambot.api.utilities.impl Condition])
 
 (defn inventoryIsFull
-  "Checks if player's inventory is full"
   []
+  "Checks if player's inventory is full"
   (Inventory/isFull))
 
 (defn goBank
@@ -32,12 +32,29 @@
                            (recur (.getTile (Client/getLocalPlayer)))))))]
     (travelFunc (currentLocation))))
 
-(defn BankNode
+(def noCookables
+  "Checks whether that player has items they can cook"
+  ())
+
+(defn deposit
   []
-  ;; TODO: Be able to pass in a function that walks to/destination and criteria for evaluate
-  (proxy [org.dreambot.api.script.TaskNode] []
-    (priority [] (int 3))
-    ;; Will return 'true' when these conditions are met
-    (accept [] (MethodProvider/log "Evaluating whether to bank...") (and (inventoryIsFull)))
-    ;; What will execute when this node runs.
-    (execute [] (goBank) (int 5000))))
+  (when (Bank/open)
+    (MethodProvider/log "Bank Opened...")
+    (MethodProvider/sleep (utils/pollingTime))
+    (Bank/depositAll "Raw Lobster")
+    (MethodProvider/sleep (utils/pollingTime))
+    (Bank/close)))
+
+(defn bankSequence
+  []
+  (and (inventoryIsFull) (utils/travelFallback (Bank/getClosestBankLocation)) (deposit)))
+
+;; (defn BankNode
+;;   []
+;;   ;; TODO: Be able to pass in a function that walks to/destination and criteria for evaluate
+;;   (proxy [org.dreambot.api.script.TaskNode] []
+;;     (priority [] (int 3))
+;;     ;; Will return 'true' when these conditions are met
+;;     (accept [] (MethodProvider/log "Evaluating whether to bank...") (and (inventoryIsFull)))
+;;     ;; What will execute when this node runs.
+;;     (execute [] (goBank) (int 5000))))
