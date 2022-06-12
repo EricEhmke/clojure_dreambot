@@ -8,10 +8,10 @@
   []
   (Inventory/isFull))
 
-(defn hasRequiredTools
+(defn hasRequiredItems
   "Checks whether that player has the required tool"
-  [toolsList]
-  (Inventory/containsAll toolsList))
+  [itemList]
+  (Inventory/containsAll itemList))
 
 (defn hasInventorySpace
   "Makes sure there is space in the player's inventory"

@@ -5,16 +5,36 @@
             [dreambot-test.utils.behaviortree :as btree]))
 
 (import [org.dreambot.api.methods.map Area]
-        [org.dreambot.api.methods.container.impl.bank Bank])
+        [org.dreambot.api.methods.container.impl.bank Bank]
+        [org.dreambot.api.methods.container.iml Inventory])
+
+(def scriptConfig
+  {:requiredEquipment ["Lobster pot"]
+   :depositItems ["Lobster"]
+   :fishingArea (new Area 2833 3436 3421)
+   :cookItem ["Raw Lobster"]})
 
 (defn bankSequence
-  []
-  (and (inv/inventoryIsFull) (btree/travelFallback (.getArea (Bank/getClosestBankLocation) 10)) (banking/deposit ["Raw Lobster"])))
+  [depositItems]
+  (and (inv/inventoryIsFull)
+       (not (Inventory/contains (scriptConfig :cookItem)))
+       (btree/travelTo (.getArea (Bank/getClosestBankLocation) 10))
+       (banking/deposit depositItems)))
+
+(defn cookSequence
+  [cookItem]
+  (and (inv/inventoryIsFull)
+       (inv/hasRequiredItems cookItem)
+       (btree/travelTo ())))
 
 (defn fishSequence
   [tools fishingZone]
-  (and (inv/hasRequiredTools tools) (inv/hasInventorySpace) (btree/travelFallback fishingZone) (fishing/goFishing)))
+  (and (inv/hasRequiredItems tools)
+       (inv/hasInventorySpace)
+       (btree/travelTo fishingZone)
+       (fishing/goFishing)))
 
 (defn traverseTree
   []
-  (or (fishSequence ["Lobster pot"] (new Area 2833 3436 2861 3421)) (bankSequence)))
+  (or (fishSequence (scriptConfig :requiredEquipment) (scriptConfig :fishingArea))
+      (bankSequence (scriptConfig :depositItems))))
