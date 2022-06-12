@@ -20,6 +20,9 @@
         (.isAnimating (Client/getLocalPlayer))
         (.exists fishingSpot)))))
 
+(def fishTypeInteract
+  {:Lobster "Cage"})
+
 (defn lobsterFilter
   "Filters lobster fishing spots"
   []
@@ -29,15 +32,17 @@
         false
         (.hasAction npc (into-array ["Cage"]))))))
 
-;; TODO: Be able to pass in a fish type or equipment or something.. function too big
+(def fishingSpotFilter
+  {:Lobster lobsterFilter})
+
 (defn goFishing
   "Fishs"
-  []
-  (let [fishingSpot  (NPCs/closest (lobsterFilter))
+  [fishType]
+  (let [fishingSpot  (NPCs/closest (fishingSpotFilter fishType))
         isFishing (isFishing fishingSpot)]
     (MethodProvider/log (str "Fishing spot located..."))
     ;; TODO: Handle cases where there are no suitable fishing spots
-    (if (and (not (nil? fishingSpot)) (.interact fishingSpot "Cage")) ;;TODO: funciton for vetifying spot
+    (if (and (not (nil? fishingSpot)) (.interact fishingSpot (fishTypeInteract fishType)))
       (do
         (MethodProvider/log "Interacted with fishing spot...")
         (when (> 70 (rand-int 100)) (antiban/moveMouseOutOfScreen))
@@ -50,8 +55,6 @@
 
       (MethodProvider/log "Could not find a suitable fishing spot...")))
 
-  (when (and (Dialogues/inDialogue) (Dialogues/canContinue))
-    (Dialogues/continueDialogue)
-    (MethodProvider/sleep (antiban/pollingTime)))
+  (utils/clearDialogue) ;; clear level up or full inventory dialogue
 
   (MethodProvider/log "Completed one fishing loop..."))

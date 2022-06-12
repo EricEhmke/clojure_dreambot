@@ -2,16 +2,20 @@
   (:require [dreambot-test.utils.fishing :as fishing]
             [dreambot-test.utils.banking :as banking]
             [dreambot-test.utils.inventory :as inv]
-            [dreambot-test.utils.behaviortree :as btree]))
+            [dreambot-test.utils.behaviortree :as btree]
+            [dreambot-test.utils.areas :as areas]
+            [dreambot-test.utils.equipment :as equipment]))
 
-(import [org.dreambot.api.methods.map Area]
-        [org.dreambot.api.methods.container.impl.bank Bank]
-        [org.dreambot.api.methods.container.iml Inventory])
+(import
+ [org.dreambot.api.methods.container.impl.bank Bank]
+ [org.dreambot.api.methods.container.iml Inventory])
 
+;; TODO should come in through the java shim
 (def scriptConfig
-  {:requiredEquipment ["Lobster pot"]
+  {:fishType "Raw Lobster"
    :depositItems ["Lobster"]
-   :fishingArea (new Area 2833 3436 3421)
+   :fishingArea (areas/fishingAreas :catherby)
+   :cookArea (areas/cookingAreas :catherby)
    :cookItem ["Raw Lobster"]})
 
 (defn bankSequence
@@ -28,13 +32,14 @@
        (btree/travelTo ())))
 
 (defn fishSequence
-  [tools fishingZone]
-  (and (inv/hasRequiredItems tools)
+  [fishType fishingZone]
+  (and (inv/hasRequiredItems (equipment/requiredFishingEquipment (keyword fishType)))
        (inv/hasInventorySpace)
        (btree/travelTo fishingZone)
-       (fishing/goFishing)))
+       (fishing/goFishing fishType)))
 
 (defn traverseTree
   []
-  (or (fishSequence (scriptConfig :requiredEquipment) (scriptConfig :fishingArea))
+  ;; TODO: required equipment should be looked up depending on the fish type
+  (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
       (bankSequence (scriptConfig :depositItems))))

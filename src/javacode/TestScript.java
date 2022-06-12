@@ -27,6 +27,8 @@ public class TestScript extends AbstractScript {
   public void onStart() {
     MethodProvider.log("Starting Fishing Script...");
   }
+  //TODO: Create a gui to choose:
+  // TODO: Choose type of fish, location, whether to cook, bank location
 
   @Override
   public int onLoop() {
