@@ -7,7 +7,6 @@
  [org.dreambot.api Client]
  [org.dreambot.api.methods.interactive NPCs]
  [org.dreambot.api.methods MethodProvider]
- [org.dreambot.api.methods.dialogues Dialogues]
  [org.dreambot.api.utilities.impl Condition])
 
 (defn isFishing
@@ -32,13 +31,13 @@
         false
         (.hasAction npc (into-array ["Cage"]))))))
 
-(def fishingSpotFilter
+(def fishingSpotFilterMap
   {:Lobster lobsterFilter})
 
 (defn goFishing
   "Fishs"
   [fishType]
-  (let [fishingSpot  (NPCs/closest (fishingSpotFilter fishType))
+  (let [fishingSpot  (NPCs/closest (fishingSpotFilterMap fishType))
         isFishing (isFishing fishingSpot)]
     (MethodProvider/log (str "Fishing spot located..."))
     ;; TODO: Handle cases where there are no suitable fishing spots
@@ -55,6 +54,6 @@
 
       (MethodProvider/log "Could not find a suitable fishing spot...")))
 
-  (utils/clearDialogue) ;; clear level up or full inventory dialogue
+  (utils/clearDialogue) ;; Clear level up or inventory full dialogues
 
   (MethodProvider/log "Completed one fishing loop..."))
