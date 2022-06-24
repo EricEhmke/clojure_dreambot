@@ -8,14 +8,14 @@
 
 (import
  [org.dreambot.api.methods.container.impl.bank Bank]
- [org.dreambot.api.methods.container.iml Inventory])
+ [org.dreambot.api.methods.container.impl Inventory])
 
 ;; TODO should come in through the java shim
 (def scriptConfig
   {:fishType "Raw Lobster"
    :depositItems ["Lobster"]
-   :fishingArea (areas/fishingAreas :catherby)
-   :cookArea (areas/cookingAreas :catherby)
+   :fishingArea "Catherby"
+   :cookArea "Catherby"
    :cookItem ["Raw Lobster"]})
 
 (defn bankSequence
@@ -26,20 +26,19 @@
        (banking/deposit depositItems)))
 
 (defn cookSequence
-  [cookItem]
+  [cookItem cookingArea]
   (and (inv/inventoryIsFull)
        (inv/hasRequiredItems cookItem)
-       (btree/travelTo ())))
+       (btree/travelTo (areas/cookingAreas (keyword cookingArea)))))
 
 (defn fishSequence
   [fishType fishingZone]
   (and (inv/hasRequiredItems (equipment/requiredFishingEquipment (keyword fishType)))
        (inv/hasInventorySpace)
-       (btree/travelTo fishingZone)
+       (btree/travelTo (areas/fishingAreas (keyword fishingZone)))
        (fishing/goFishing fishType)))
 
 (defn traverseTree
   []
-  ;; TODO: required equipment should be looked up depending on the fish type
   (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
       (bankSequence (scriptConfig :depositItems))))

@@ -2,6 +2,6 @@
 
 (import [org.dreambot.api.methods.map Area])
 
-(def fishingAreas {:catherby (new Area 2833 3436 3421)})
+(def fishingAreas {:Catherby (new Area 2833 3436 2861 3421)})
 
-(def cookingAreas {:catherby (new Area 2815 3444 2818 3439)})
+(def cookingAreas {:Catherby (new Area 2815 3444 2818 3439)})
