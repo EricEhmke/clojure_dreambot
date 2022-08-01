@@ -32,16 +32,17 @@
         (.hasAction npc (into-array ["Cage"]))))))
 
 (def fishingSpotFilterMap
-  {:Lobster lobsterFilter})
+  "Maps a fish type (key) to the correct fishing spot filter (value)"
+  {:Lobster (lobsterFilter)})
 
 (defn goFishing
   "Fishs"
   [fishType]
-  (let [fishingSpot  (NPCs/closest (fishingSpotFilterMap fishType))
+  (let [fishingSpot  (NPCs/closest (fishingSpotFilterMap (keyword fishType)))
         isFishing (isFishing fishingSpot)]
     (MethodProvider/log (str "Fishing spot located..."))
     ;; TODO: Handle cases where there are no suitable fishing spots
-    (if (and (not (nil? fishingSpot)) (.interact fishingSpot (fishTypeInteract fishType)))
+    (if (and (not (nil? fishingSpot)) (.interact fishingSpot (fishTypeInteract (keyword fishType))))
       (do
         (MethodProvider/log "Interacted with fishing spot...")
         (when (> 70 (rand-int 100)) (antiban/moveMouseOutOfScreen))

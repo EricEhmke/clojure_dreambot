@@ -41,7 +41,6 @@ public class TestScript extends AbstractScript {
 
   private Runnable goGui = new Runnable() {
     public void run() {
-      MethodProvider.log("Trying to run gui");
       Gui(config);
     }
   };
