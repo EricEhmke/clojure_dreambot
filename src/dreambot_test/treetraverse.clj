@@ -8,20 +8,21 @@
 
 (import
  [org.dreambot.api.methods.container.impl.bank Bank]
- [org.dreambot.api.methods.container.impl Inventory])
+ [org.dreambot.api.methods.container.impl Inventory]
+ [org.dreambot.api.methods MethodProvider])
 
-;; TODO should come in through the java shim
-(def scriptConfig
-  {:fishType "Raw Lobster"
-   :depositItems ["Lobster"]
-   :fishingArea "Catherby"
-   :cookArea "Catherby"
-   :cookItem ["Raw Lobster"]})
+;; ;; TODO should come in through the java shim
+;; (def scriptConfig
+;;   {:fishType "Raw Lobster"
+;;    :depositItems ["Lobster"]
+;;    :fishingArea "Catherby"
+;;    :cookArea "Catherby"
+;;    :cookItem ["Raw Lobster"]})
 
 (defn bankSequence
-  [depositItems]
+  [depositItems cookItem]
   (and (inv/inventoryIsFull)
-       (not (Inventory/contains (scriptConfig :cookItem)))
+       (not (Inventory/contains cookItem))
        (btree/travelTo (.getArea (Bank/getClosestBankLocation) 10))
        (banking/deposit depositItems)))
 
@@ -39,6 +40,11 @@
        (fishing/goFishing fishType)))
 
 (defn traverseTree
-  []
-  (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
-      (bankSequence (scriptConfig :depositItems))))
+  [scriptConfig]
+  (MethodProvider/log (str "Script Config: " (str scriptConfig)))
+  (let [scriptConfig (into {} scriptConfig)]
+  ;; cast to clojure map
+    (when (and (not-empty scriptConfig) (true? (scriptConfig :start)))
+    ;; TODO: cast scriptConfig to a clojure map
+      (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
+          (bankSequence (scriptConfig :depositItemsl) (scriptConfig :cookItem))))))
