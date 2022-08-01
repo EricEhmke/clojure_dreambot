@@ -41,10 +41,7 @@
 
 (defn traverseTree
   [scriptConfig]
-  (MethodProvider/log (str "Script Config: " (str scriptConfig)))
   (let [scriptConfig (into {} scriptConfig)]
-  ;; cast to clojure map
-    (when (and (not-empty scriptConfig) (true? (scriptConfig :start)))
-    ;; TODO: cast scriptConfig to a clojure map
+    (when (true? (scriptConfig :start))
       (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
           (bankSequence (scriptConfig :depositItemsl) (scriptConfig :cookItem))))))

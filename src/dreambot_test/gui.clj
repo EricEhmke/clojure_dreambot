@@ -44,10 +44,10 @@
                             ;; mutate the items in the config
                             (MethodProvider/log "Button clicked")
                             (doto config
-                              (. put ":cook" (.isSelected cookCheckBox))
-                              (. put ":fishType" (str (.getSelectedItem fishTypeCombo)))
-                              (. put ":fishingArea" (str (.getSelectedItem fishAreaCombo)))
-                              (. put ":start" true))
+                              (. put :cook (.isSelected cookCheckBox))
+                              (. put :fishType (str (.getSelectedItem fishTypeCombo)))
+                              (. put :fishingArea (str (.getSelectedItem fishAreaCombo)))
+                              (. put :start true))
                             (.dispose frame))))
     (.add buttonPanel startButton)
 
