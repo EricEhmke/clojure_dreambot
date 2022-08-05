@@ -9,6 +9,7 @@ import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.script.AbstractScript;
+import org.dreambot.api.methods.map.Area;
 
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;

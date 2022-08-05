@@ -6,10 +6,10 @@
  [org.dreambot.api.methods.container.impl.bank Bank])
 
 (defn deposit
-  [item]
+  [depositExcept]
   (when (Bank/open)
     (MethodProvider/log "Bank Opened...")
     (MethodProvider/sleep (antiban/pollingTime))
-    (Bank/depositAllExcept item)
+    (Bank/depositAllExcept (into-array depositExcept))
     (MethodProvider/sleep (antiban/pollingTime))
     (Bank/close)))

@@ -4,27 +4,21 @@
             [dreambot-test.utils.inventory :as inv]
             [dreambot-test.utils.behaviortree :as btree]
             [dreambot-test.utils.areas :as areas]
-            [dreambot-test.utils.equipment :as equipment]))
+            [dreambot-test.utils.equipment :as equipment]
+            [dreambot-test.utils.walking :as walking]))
 
 (import
  [org.dreambot.api.methods.container.impl.bank Bank]
  [org.dreambot.api.methods.container.impl Inventory]
- [org.dreambot.api.methods MethodProvider])
-
-;; ;; TODO should come in through the java shim
-;; (def scriptConfig
-;;   {:fishType "Raw Lobster"
-;;    :depositItems ["Lobster"]
-;;    :fishingArea "Catherby"
-;;    :cookArea "Catherby"
-;;    :cookItem ["Raw Lobster"]})
+ [org.dreambot.api.methods MethodProvider]
+ [org.dreambot.api Client])
 
 (defn bankSequence
-  [depositItems cookItem]
+  [depositAllExcept cookItem]
   (and (inv/inventoryIsFull)
        (not (Inventory/contains cookItem))
        (btree/travelTo (.getArea (Bank/getClosestBankLocation) 10))
-       (banking/deposit depositItems)))
+       (banking/deposit depositAllExcept)))
 
 (defn cookSequence
   [cookItem cookingArea]
@@ -32,16 +26,33 @@
        (inv/hasRequiredItems cookItem)
        (btree/travelTo (areas/cookingAreas (keyword cookingArea)))))
 
+(def fishingSpots (atom []))
+
+(defn travelToFishingSpot
+  []
+  ;; find closest fishing spot
+  (let [closestFishingSpot (walking/findClosestArea @fishingSpots)
+        atDestination (walking/isInArea closestFishingSpot)]
+    (if atDestination
+      ;; Remove this spot from the atom since its been visited
+      (do
+        (swap! fishingSpots #(remove (fn [n] (= n closestFishingSpot)) %))
+        atDestination)
+      (walking/walkNext closestFishingSpot))))
+
 (defn fishSequence
   [fishType fishingZone]
+  (when (empty? @fishingSpots) (reset! fishingSpots (areas/fishingAreas (keyword fishingZone))))
   (and (inv/hasRequiredItems (equipment/requiredFishingEquipment (keyword fishType)))
        (inv/hasInventorySpace)
-       (btree/travelTo (areas/fishingAreas (keyword fishingZone)))
-       (fishing/goFishing fishType)))
+       (travelToFishingSpot) ;; go to closest fishing area in array
+       (and (fishing/goFishing fishType)
+          ;; Reset the atom/fishingSpots when we find a spot
+            (reset! fishingSpots (areas/fishingAreas (keyword fishingZone))))))
 
 (defn traverseTree
   [scriptConfig]
   (let [scriptConfig (into {} scriptConfig)]
     (when (true? (scriptConfig :start))
       (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
-          (bankSequence (scriptConfig :depositItemsl) (scriptConfig :cookItem))))))
+          (bankSequence (equipment/requiredFishingEquipment (keyword (scriptConfig :fishType))) (scriptConfig :cookItem))))))

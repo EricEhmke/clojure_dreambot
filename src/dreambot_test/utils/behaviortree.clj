@@ -12,7 +12,8 @@
 (defn travelTo
   "A fallback node for traveling to a destination"
   [destination]
-  (or (walking/isAtDestination destination) (walking/walkNext destination)))
+  ;; TODO: handle character being stuck (walkNext returning false)
+  (or (walking/isInArea destination) (walking/walkNext destination)))
 
 (defn clearDialogue
   []

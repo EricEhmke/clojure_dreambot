@@ -27,7 +27,6 @@
     ;; Start of upper gui
     (.setLayout settingsPanel (new GridLayout 0 2))
     ;; Choose area to fish in
-    ;; (.add settingsPanel (.setText (new JLabel) "Fishing Area"))
     (.add settingsPanel (new JLabel "Fishing Area"))
     (.add settingsPanel fishAreaCombo)
     ;; Choose type of fish
@@ -42,7 +41,7 @@
                         (reify ActionListener
                           (actionPerformed [this e]
                             ;; mutate the items in the config
-                            (MethodProvider/log "Button clicked")
+                            (MethodProvider/log "GUI Closed/Scripted Started...")
                             (doto config
                               (. put :cook (.isSelected cookCheckBox))
                               (. put :fishType (str (.getSelectedItem fishTypeCombo)))

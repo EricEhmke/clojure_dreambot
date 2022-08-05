@@ -9,6 +9,11 @@
  [org.dreambot.api.methods MethodProvider]
  [org.dreambot.api.utilities.impl Condition])
 
+(def fishTypeInteract
+  "Maps the fish type to its correct right-click action.
+  Used to identify if you can fish the desired fish at a spot"
+  {:Lobster "Cage"})
+
 (defn isFishing
   "Returns a Condition which checks if the player is animating"
   [fishingSpot]
@@ -18,9 +23,6 @@
       (if (< 40 (rand-int 100)) ;; 40% of the time we notice if the fishing spot has moved.
         (.isAnimating (Client/getLocalPlayer))
         (.exists fishingSpot)))))
-
-(def fishTypeInteract
-  {:Lobster "Cage"})
 
 (defn lobsterFilter
   "Filters lobster fishing spots"
@@ -40,8 +42,6 @@
   [fishType]
   (let [fishingSpot  (NPCs/closest (fishingSpotFilterMap (keyword fishType)))
         isFishing (isFishing fishingSpot)]
-    (MethodProvider/log (str "Fishing spot located..."))
-    ;; TODO: Handle cases where there are no suitable fishing spots
     (if (and (not (nil? fishingSpot)) (.interact fishingSpot (fishTypeInteract (keyword fishType))))
       (do
         (MethodProvider/log "Interacted with fishing spot...")
@@ -51,9 +51,12 @@
         (while (.verify isFishing)
           (when (> (Client/getIdleTime) (antiban/pollingTime 300000 200000))
             (antiban/antiLogout))
-          (MethodProvider/sleep (antiban/pollingTime 16000 5000))))
+          (MethodProvider/sleep (antiban/pollingTime 16000 5000)))
+        true)
 
-      (MethodProvider/log "Could not find a suitable fishing spot...")))
+      (do
+        (MethodProvider/log "Could not find a suitable fishing spot in area...")
+        false)))
 
   (utils/clearDialogue) ;; Clear level up or inventory full dialogues
 
