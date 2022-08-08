@@ -17,7 +17,7 @@
   "Makes a single action to walk to the destination"
   [destinationArea]
   (let [destinationTile (.getRandomTile destinationArea)]
-    (MethodProvider/sleep (antiban/pollingTime 2000 200))
+    (MethodProvider/sleep (antiban/pollingTime 1500 200))
     (if (and (Walking/canWalk destinationTile) (Walking/shouldWalk))
       (Walking/walk destinationTile)
       true))) ;; return true to satisfy the behavior tree node as having performed this action

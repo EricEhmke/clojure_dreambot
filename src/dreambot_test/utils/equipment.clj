@@ -2,4 +2,6 @@
 
 (def requiredFishingEquipment
   "Holds the required equipment to fish for each fish type"
-  {:Lobster ["Lobster pot"]})
+  {:Lobster ["Lobster pot"]
+   :Shrimp ["Small fishing net"]
+   :Anchovies ["Small fishing net"]})

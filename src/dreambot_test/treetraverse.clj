@@ -17,7 +17,7 @@
   [depositAllExcept cookItem]
   (and (inv/inventoryIsFull)
        (not (Inventory/contains cookItem))
-       (btree/travelTo (.getArea (Bank/getClosestBankLocation) 10))
+       (banking/walkAndOpenClosest)
        (banking/deposit depositAllExcept)))
 
 (defn cookSequence
@@ -30,7 +30,6 @@
 
 (defn travelToFishingSpot
   []
-  ;; find closest fishing spot
   (let [closestFishingSpot (walking/findClosestArea @fishingSpots)
         atDestination (walking/isInArea closestFishingSpot)]
     (if atDestination
@@ -45,10 +44,11 @@
   (when (empty? @fishingSpots) (reset! fishingSpots (areas/fishingAreas (keyword fishingZone))))
   (and (inv/hasRequiredItems (equipment/requiredFishingEquipment (keyword fishType)))
        (inv/hasInventorySpace)
-       (travelToFishingSpot) ;; go to closest fishing area in array
-       (and (fishing/goFishing fishType)
-          ;; Reset the atom/fishingSpots when we find a spot
-            (reset! fishingSpots (areas/fishingAreas (keyword fishingZone))))))
+       (or
+        (and (fishing/goFishing fishType)
+            ;; Reset the atom/fishingSpots when we find a spot
+             (reset! fishingSpots (areas/fishingAreas (keyword fishingZone))))
+        (travelToFishingSpot))))
 
 (defn traverseTree
   [scriptConfig]

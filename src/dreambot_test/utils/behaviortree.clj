@@ -12,7 +12,8 @@
 (defn travelTo
   "A fallback node for traveling to a destination"
   [destination]
-  ;; TODO: handle character being stuck (walkNext returning false)
+  ;; TODO: use an atom to handle character being stuck (check that the char is not at its last known loc))
+  (MethodProvider/log "Walking to destination")
   (or (walking/isInArea destination) (walking/walkNext destination)))
 
 (defn clearDialogue

@@ -7,9 +7,17 @@
 
 (defn deposit
   [depositExcept]
+  (MethodProvider/log "Attempting to deposit...")
   (when (Bank/open)
     (MethodProvider/log "Bank Opened...")
     (MethodProvider/sleep (antiban/pollingTime))
     (Bank/depositAllExcept (into-array depositExcept))
     (MethodProvider/sleep (antiban/pollingTime))
     (Bank/close)))
+
+(defn walkAndOpenClosest
+  "Walks to the closest bank. If at bank, opens it"
+  []
+  (let [walkOrOpen (Bank/openClosest)]
+    (MethodProvider/sleep (antiban/pollingTime)) ;; Sleep to prevent fast actions
+    walkOrOpen))

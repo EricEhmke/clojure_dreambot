@@ -12,8 +12,8 @@
   [config]
   (let [frame (JFrame.)
         settingsPanel (new JPanel)
-        fishAreaCombo (new JComboBox (into-array ["Catherby"]))
-        fishTypeCombo (new JComboBox (into-array ["Lobster"]))
+        fishAreaCombo (new JComboBox (into-array ["Catherby" "Draynor" "Lumbridge_Swamp"])) ;; Must match the key in the Areas map
+        fishTypeCombo (new JComboBox (into-array ["Lobster" "Shrimp" "Anchovies"]))
         cookCheckBox  (new JCheckBox "Cook Raw Fish")
         startButton (new JButton "Start Script")
         buttonPanel (JPanel.)]
