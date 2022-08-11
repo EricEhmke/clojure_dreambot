@@ -21,6 +21,30 @@
                                       (new Tile 3239 3141 0)
                                       (new Tile 3241 3142 0)
                                       (new Tile 3247 3160 0)
-                                      (new Tile 3241 3160 0)]))]})
+                                      (new Tile 3241 3160 0)]))]
+                   :Barbarian_Village
+                   [(new Area
+                         (into-array [(new Tile 3100 3426 0)
+                                      (new Tile 3100 3435 0)
+                                      (new Tile 3110 3435 0)
+                                      (new Tile 3108 3430 0)
+                                      (new Tile 3104 3426 0)
+                                      (new Tile 3104 3423 0)]))]
+                   :Fishing_Guild
+                   [(new Area
+                         (into-array [(new Tile 2605 3426 0)
+                                      (new Tile 2605 3420 0)
+                                      (new Tile 2595 3420 0)
+                                      (new Tile 2595 3422 0)
+                                      (new Tile 2598 3422 0)
+                                      (new Tile 2598 3422 0)
+                                      (new Tile 2599 3426 0)]))
+                    (new Area
+                         (into-array [(new Tile 2603 3416 0)
+                                      (new Tile 2612 3416 0)
+                                      (new Tile 2612 3411 0)
+                                      (new Tile 2605 3411 0)
+                                      (new Tile 2605 3406 0)
+                                      (new Tile 2603 3406 0)]))]})
 
 (def cookingAreas {:Catherby (new Area 2815 3444 2818 3439)})

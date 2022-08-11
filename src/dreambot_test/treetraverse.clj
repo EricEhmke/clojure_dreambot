@@ -4,14 +4,11 @@
             [dreambot-test.utils.inventory :as inv]
             [dreambot-test.utils.behaviortree :as btree]
             [dreambot-test.utils.areas :as areas]
-            [dreambot-test.utils.equipment :as equipment]
             [dreambot-test.utils.walking :as walking]))
 
 (import
- [org.dreambot.api.methods.container.impl.bank Bank]
  [org.dreambot.api.methods.container.impl Inventory]
- [org.dreambot.api.methods MethodProvider]
- [org.dreambot.api Client])
+ [org.dreambot.api.methods MethodProvider])
 
 (defn bankSequence
   [depositAllExcept cookItem]
@@ -42,7 +39,7 @@
 (defn fishSequence
   [fishType fishingZone]
   (when (empty? @fishingSpots) (reset! fishingSpots (areas/fishingAreas (keyword fishingZone))))
-  (and (inv/hasRequiredItems (equipment/requiredFishingEquipment (keyword fishType)))
+  (and (inv/hasRequiredItems (get-in fishing/fishMap [(keyword fishType) :requiredEquipment]))
        (inv/hasInventorySpace)
        (or
         (and (fishing/goFishing fishType)
@@ -55,4 +52,4 @@
   (let [scriptConfig (into {} scriptConfig)]
     (when (true? (scriptConfig :start))
       (or (fishSequence (scriptConfig :fishType) (scriptConfig :fishingArea))
-          (bankSequence (equipment/requiredFishingEquipment (keyword (scriptConfig :fishType))) (scriptConfig :cookItem))))))
+          (bankSequence (get-in fishing/fishMap [(keyword (scriptConfig :fishType)) :requiredEquipment]) (scriptConfig :cookItem))))))
