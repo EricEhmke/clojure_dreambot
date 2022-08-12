@@ -18,9 +18,7 @@
         startButton (new JButton "Start Script")
         buttonPanel (JPanel.)]
 
-    (MethodProvider/log "In GUI")
     (.setTitle frame "Simple Fisher")
-
     (.setDefaultCloseOperation frame (JFrame/DISPOSE_ON_CLOSE))
     (.setLocationRelativeTo frame nil)
     (.setPreferredSize frame (new Dimension 300 170))
@@ -39,7 +37,6 @@
 
     (.setLayout buttonPanel (new FlowLayout))
 
-    (MethodProvider/log "At start button")
     (.addActionListener startButton
                         (reify ActionListener
                           (actionPerformed [this e]
