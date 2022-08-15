@@ -1,4 +1,4 @@
-package javacode;
+package javaCode;
 
 import clojure.stacktrace__init;
 import clojure.java.api.Clojure;
@@ -18,13 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.PrintWriter;
 
-@ScriptManifest(name = "Fishing Script", description = "Task Script With Behavior Trees", author = "Developer Name", version = 2.0, category = Category.FISHING, image = "")
-public class TestScript extends AbstractScript {
+@ScriptManifest(name = "Rusty Fisher", description = "Fishing script supporting trout, salmon, lobster, shark and more.", author = "Rusty", version = 1.0, category = Category.FISHING, image = "")
+public class javaShim extends AbstractScript {
 
   Map<String, Object> config = new HashMap<>();
 
   static {
-    Thread.currentThread().setContextClassLoader(TestScript.class.getClassLoader());
+    Thread.currentThread().setContextClassLoader(javaShim.class.getClassLoader());
     IFn require = Clojure.var("clojure.core", "require");
     require.invoke(Clojure.read("rusty-fisher.treetraverse"));
     require.invoke(Clojure.read("rusty-fisher.gui"));
