@@ -1,6 +1,29 @@
-# dreambot_test
+# Rusty Fisher
 
-FIXME: description
+A simple fishing bot that will continuously fish and bank. Supports:
+
+**Supports Fish:**
+Lobster
+Shrimp
+Anchovies
+Trout
+Salmon
+Pike
+Tuna
+Swordfish
+Shark
+Sardines
+Herring
+Cod
+Bass
+Mackerel
+
+**In Areas:**
+Catherby
+Fishing Guild
+Lumbridge Swamp
+Barbarian Village
+Draynor
 
 ## Installation
 
