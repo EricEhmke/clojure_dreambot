@@ -26,17 +26,17 @@ public class TestScript extends AbstractScript {
   static {
     Thread.currentThread().setContextClassLoader(TestScript.class.getClassLoader());
     IFn require = Clojure.var("clojure.core", "require");
-    require.invoke(Clojure.read("dreambot-test.treetraverse"));
-    require.invoke(Clojure.read("dreambot-test.gui"));
+    require.invoke(Clojure.read("rusty-fisher.treetraverse"));
+    require.invoke(Clojure.read("rusty-fisher.gui"));
   }
 
   private Object Gui(Object scriptConfig) {
-    IFn createGui = Clojure.var("dreambot-test.gui", "createGui");
+    IFn createGui = Clojure.var("rusty-fisher.gui", "createGui");
     return createGui.invoke(scriptConfig);
   }
 
   private Object TraverseTree(Object scriptConfig) {
-    IFn TraverseBehaviorTree = Clojure.var("dreambot-test.treetraverse", "traverseTree");
+    IFn TraverseBehaviorTree = Clojure.var("rusty-fisher.treetraverse", "traverseTree");
     return TraverseBehaviorTree.invoke(scriptConfig);
   }
 
