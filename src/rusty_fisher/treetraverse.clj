@@ -1,10 +1,10 @@
-(ns dreambot-test.treetraverse
-  (:require [dreambot-test.utils.fishing :as fishing]
-            [dreambot-test.utils.banking :as banking]
-            [dreambot-test.utils.inventory :as inv]
-            [dreambot-test.utils.behaviortree :as btree]
-            [dreambot-test.utils.areas :as areas]
-            [dreambot-test.utils.walking :as walking]))
+(ns rusty-fisher.treetraverse
+  (:require [rusty-fisher.utils.fishing :as fishing]
+            [rusty-fisher.utils.banking :as banking]
+            [rusty-fisher.utils.inventory :as inv]
+            [rusty-fisher.utils.behaviortree :as btree]
+            [rusty-fisher.utils.areas :as areas]
+            [rusty-fisher.utils.walking :as walking]))
 
 (import
  [org.dreambot.api.methods.container.impl Inventory]

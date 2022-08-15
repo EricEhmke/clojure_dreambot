@@ -1,6 +1,6 @@
-(ns dreambot-test.utils.behaviortree
-  (:require [dreambot-test.utils.walking :as walking]
-            [dreambot-test.utils.antiban :as antiban]))
+(ns rusty-fisher.utils.behaviortree
+  (:require [rusty-fisher.utils.walking :as walking]
+            [rusty-fisher.utils.antiban :as antiban]))
 
 (import
  [org.dreambot.api Client]

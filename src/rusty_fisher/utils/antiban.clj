@@ -1,4 +1,4 @@
-(ns dreambot-test.utils.antiban)
+(ns rusty-fisher.utils.antiban)
 
 (import [java.util Random]
         [java.awt Point]

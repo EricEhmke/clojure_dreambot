@@ -1,4 +1,4 @@
-(ns dreambot-test.utils.areas)
+(ns rusty-fisher.utils.areas)
 
 (import [org.dreambot.api.methods.map Area Tile])
 

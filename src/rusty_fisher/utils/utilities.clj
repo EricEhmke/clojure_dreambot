@@ -1,6 +1,6 @@
-(ns dreambot-test.utils.utilities
+(ns rusty-fisher.utils.utilities
   (:require
-   [dreambot-test.utils.antiban :as antiban]))
+   [rusty-fisher.utils.antiban :as antiban]))
 
 (import
  [org.dreambot.api.methods MethodProvider]

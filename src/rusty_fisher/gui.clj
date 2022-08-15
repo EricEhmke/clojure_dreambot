@@ -1,4 +1,4 @@
-(ns dreambot-test.gui)
+(ns rusty-fisher.gui)
 
 (import
  [javax.swing JFrame JPanel JLabel JCheckBox JButton JComboBox SwingUtilities]
@@ -13,7 +13,7 @@
   (let [frame (JFrame.)
         settingsPanel (new JPanel)
         fishAreaCombo (new JComboBox (into-array ["Catherby" "Draynor" "Lumbridge_Swamp" "Barbarian_Village" "Fishing_Guild"])) ;; Must match the key in the Areas map
-        fishTypeCombo (new JComboBox (into-array ["Lobster" "Shrimp" "Anchovies" "Trout" "Salmon" "Pike" "Tuna" "Swordfish" "Shark" "Sardine" "Herring"]))
+        fishTypeCombo (new JComboBox (into-array ["Lobster" "Shrimp" "Anchovies" "Trout" "Salmon" "Pike" "Tuna" "Swordfish" "Shark" "Sardine" "Herring" "Cod" "Bass" "Mackerel"]))
         ;;cookCheckBox  (new JCheckBox "Cook Raw Fish")
         startButton (new JButton "Start Script")
         buttonPanel (JPanel.)]

@@ -1,5 +1,5 @@
-(ns dreambot-test.utils.banking
-  (:require [dreambot-test.utils.antiban :as antiban]))
+(ns rusty-fisher.utils.banking
+  (:require [rusty-fisher.utils.antiban :as antiban]))
 
 (import
  [org.dreambot.api.methods MethodProvider]

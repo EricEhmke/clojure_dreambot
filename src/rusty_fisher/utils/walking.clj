@@ -1,6 +1,6 @@
-(ns dreambot-test.utils.walking
+(ns rusty-fisher.utils.walking
   (:require
-   [dreambot-test.utils.antiban :as antiban]))
+   [rusty-fisher.utils.antiban :as antiban]))
 
 (import
  [org.dreambot.api Client]

@@ -1,7 +1,7 @@
-(ns dreambot-test.utils.fishing
-  (:require [dreambot-test.utils.walking :as walk]
-            [dreambot-test.utils.antiban :as antiban]
-            [dreambot-test.utils.utilities :as utils]))
+(ns rusty-fisher.utils.fishing
+  (:require [rusty-fisher.utils.walking :as walk]
+            [rusty-fisher.utils.antiban :as antiban]
+            [rusty-fisher.utils.utilities :as utils]))
 
 (import
  [org.dreambot.api Client]
@@ -10,34 +10,21 @@
  [org.dreambot.api.utilities.impl Condition]
  [org.dreambot.api.methods.input Camera])
 
-;;TODO: Add trout, salmon, tuna, swordfish, sharks
-;; (def fishTypeInteract
-;;   "Maps the fish type to the correct right-click actions.
-;;   Used to identify if you can fish the desired fish at a spot"
-;;   {:Lobster [["Cage"]]
-;;    :Shrimp [["Small Net"] ["Net"]]
-;;    :Anchovies [["Small Net"] ["Net"]]
-;;    :Trout [["Lure"]]
-;;    :Salmon [["Lure"]]
-;;    :Pike [["Bait"]]
-;;    :Tuna [["Net" "Harpoon"]] ;;Net/Harpoon
-;;    :Swordfish [["Net" "Harpoon"]] ;;Net/Harpoon
-;;    :Shark [["Harpoon"]] ;;Big Net/Harpoon
-;;    :Sardine [["Bait"]]
-;;    :Herring [["Bait"]]})
-
 (def fishMap
-  {:Lobster {:interactCommand ["Cage"] :requiredActions ["Cage"] :requiredEquipment ["Lobster pot"]}
+  {:Lobster {:interactCommand ["Cage"] :requiredActions [["Cage" "Harpoon"]] :requiredEquipment ["Lobster pot"]}
    :Shrimp {:interactCommand ["Small Net" "Net"] :requiredActions [["Small Net" "Bait"] ["Net" "Bait"]] :requiredEquipment ["Small fishing net"]} ;; Items in nested lists: each item is OR
    :Anchovies {:interactCommand ["Small Net" "Net"] :requiredActions [["Small Net" "Bait"] ["Net" "Bait"]] :requiredEquipment ["Small fishing net"]}
-   :Trout {:interactCommand ["Lure"] :requiredActions [["Lure"]] :requiredEquipment ["Fly fishing rod" "Feather"]}
-   :Salmon {:interactCommand ["Lure"] :requiredActions [["Lure"]] :requiredEquipment ["Fly fishing rod" "Feather"]}
-   :Pike {:interactCommand ["Bait"] :requiredActions [["Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
-   :Tuna {:interactCommand ["Harpoon"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
-   :Swordfish {:interactCommand ["Harpoon"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
-   :Shark {:interactCommand ["Harpoon"] :requiredActions [["Big Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
-   :Sardine {:interactCommand ["Bait"] :requiredActions [["Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
-   :Herring {:interactCommand ["Bait"] :requiredActions [["Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}})
+   :Trout {:interactCommand ["Lure"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fly fishing rod" "Feather"]}
+   :Salmon {:interactCommand ["Lure"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fly fishing rod" "Feather"]}
+   :Pike {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
+   :Tuna {:interactCommand ["Harpoon"] :requiredActions [["Cage" "Harpoon"]] :requiredEquipment ["Harpoon"]}
+   :Swordfish {:interactCommand ["Harpoon"] :requiredActions [["Cage" "Harpoon"]] :requiredEquipment ["Harpoon"]}
+   :Shark {:interactCommand ["Harpoon"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
+   :Sardine {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
+   :Herring {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
+   :Cod {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}
+   :Bass {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}
+   :Mackerel {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}})
 
 (defn hasActionFilter
   "Filters NPC that have an actionName in their right-click menu"
@@ -52,7 +39,7 @@
             true))))))
 
 (defn isFishing
-  "Returns a Condition which checks if the player is animating"
+  "Returns a Condition which checks if the player is fishing"
   [fishingSpot]
   (reify Condition
     (verify [_]
