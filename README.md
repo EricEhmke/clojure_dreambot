@@ -1,6 +1,6 @@
 # Rusty Fisher
 
-A simple fishing bot that will continuously fish and bank. Supports:
+A simple fishing bot that will continuously fish and bank. 
 
 **Supports Fish:**
 Lobster

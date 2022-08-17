@@ -1,7 +1,8 @@
 (ns rusty-fisher.utils.fishing
   (:require [rusty-fisher.utils.walking :as walk]
             [rusty-fisher.utils.antiban :as antiban]
-            [rusty-fisher.utils.utilities :as utils]))
+            [rusty-fisher.utils.utilities :as utils]
+            [rusty-fisher.constants :as constants]))
 
 (import
  [org.dreambot.api Client]
@@ -67,10 +68,10 @@
           (do
             (MethodProvider/log "Interacted with fishing spot...")
             (when (> 70 (rand-int 100)) (antiban/moveMouseOutOfScreen))
-            (MethodProvider/sleep 1000) ;; Allows time for the client to register a character as moving
-            (MethodProvider/sleepWhile (walk/isTraveling) utils/timeOutTime (antiban/pollingTime))
+            (MethodProvider/sleep 3000) ;; Allows time for the client to register a character as moving
+            (MethodProvider/sleepWhile (walk/isTraveling) constants/timeOutTime (antiban/reactionDelayActive))
             (while (.verify isFishing)
-              (when (> (Client/getIdleTime) (antiban/pollingTime 300000 200000))
+              (when (> (Client/getIdleTime) (antiban/reactionDelay 10))
                 (antiban/antiLogout))
               (MethodProvider/sleep (antiban/pollingTime 16000 5000)))
             (utils/clearDialogue) ;; Clear level up or inventory full dialogues

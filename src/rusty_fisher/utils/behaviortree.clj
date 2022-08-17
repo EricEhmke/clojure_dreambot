@@ -20,4 +20,4 @@
   []
   (when (and (Dialogues/inDialogue) (Dialogues/canContinue))
     (Dialogues/continueDialogue)
-    (MethodProvider/sleep (antiban/pollingTime))))
+    (MethodProvider/sleep (antiban/reactionDelay 95))))

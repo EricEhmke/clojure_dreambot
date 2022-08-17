@@ -12,6 +12,9 @@ import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.methods.map.Area;
 
 import javax.swing.SwingUtilities;
+
+import com.google.crypto.tink.subtle.Random;
+
 import javax.swing.JFrame;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ public class javaShim extends AbstractScript {
     IFn require = Clojure.var("clojure.core", "require");
     require.invoke(Clojure.read("rusty-fisher.treetraverse"));
     require.invoke(Clojure.read("rusty-fisher.gui"));
+    require.invoke(Clojure.read("rusty-fisher.utils.antiban"));
   }
 
   private Object Gui(Object scriptConfig) {
@@ -46,6 +50,11 @@ public class javaShim extends AbstractScript {
     }
   };
 
+  private Object PlayerReactionTime() {
+    IFn reactionTime = Clojure.var("rusty-fisher.utils.antiban", "reactionDelayActive");
+    return reactionTime.invoke();
+  }
+
   @Override
   public void onStart() {
     try {
@@ -63,6 +72,6 @@ public class javaShim extends AbstractScript {
   @Override
   public int onLoop() {
     TraverseTree(config);
-    return Calculations.random(250, 500);
+    return (Integer) PlayerReactionTime();
   }
 }
