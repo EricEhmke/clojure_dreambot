@@ -16,8 +16,3 @@
   (MethodProvider/log "Walking to destination")
   (or (walking/isInArea destination) (walking/walkNext destination)))
 
-(defn clearDialogue
-  []
-  (when (and (Dialogues/inDialogue) (Dialogues/canContinue))
-    (Dialogues/continueDialogue)
-    (MethodProvider/sleep (antiban/reactionDelay 95))))

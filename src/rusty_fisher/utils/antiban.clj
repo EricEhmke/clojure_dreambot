@@ -37,15 +37,17 @@
 (defn reactionDelayAFK
   "Returns an AFK reaction/delay time for the current player"
   []
-  (pollingTime 300000 200000))
+  (let [sleepTime (pollingTime 300000 200000)]
+    ;;(MethodProvider/log (str "Extended sleep for: " (str (float (/ sleepTime 1000))) " seconds"))
+    sleepTime))
 
 (defn reactionDelay
-  "Returns an reaction/delay time that is active active% of time with default 80"
+  "Returns an reaction/delay time that is short/indicitive of action play active% of time"
   ([]
-   (reactionDelay 80))
+   (reactionDelay 98))
 
   ([active%Int]
-   (if (> (rand-int 100) active%Int)
+   (if (< (rand-int 100) active%Int)
      (reactionDelayActive)
      (reactionDelayAFK))))
 
@@ -71,6 +73,15 @@
   ;; (when (> 89 (rand-int 100)) ;; Sometimes right click
   ;;   (Mouse/click true)))
   )
+
+(defn sleepFor
+  "Sleeps for sleepTime amount of milliseconds and notifies if time is long"
+  [sleepTime]
+  (if (> sleepTime 10000)
+    (do
+      (MethodProvider/log (str "Sleeping for extended time: " (str (float (/ sleepTime 1000))) " seconds.")) ;; 10 seconds
+      (MethodProvider/sleep sleepTime))
+    (MethodProvider/sleep sleepTime)))
 
 (defn antiLogout
   "Performs an action to prevent logging out"

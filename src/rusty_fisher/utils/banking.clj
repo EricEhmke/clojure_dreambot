@@ -10,14 +10,14 @@
   (MethodProvider/log "Attempting to deposit...")
   (when (Bank/open)
     (MethodProvider/log "Bank Opened...")
-    (MethodProvider/sleep (antiban/reactionDelay 95)) ;; TODO: sleep after we open the bank. Maybe a normal average w/ large stdev?
+    (antiban/sleepFor (antiban/reactionDelay 99)) ;; TODO: sleep after we open the bank. Maybe a normal average w/ large stdev?
     (Bank/depositAllExcept (into-array depositExcept))
-    (MethodProvider/sleep (antiban/reactionDelay 95)) ;; this short sleep after deposit is OK before we close
+    (antiban/sleepFor (antiban/reactionDelay 99)) ;; this short sleep after deposit is OK before we close
     (Bank/close)))
 
 (defn walkAndOpenClosest
   "Walks to the closest bank. If at bank, opens it"
   []
   (let [walkOrOpen (Bank/openClosest)]
-    (MethodProvider/sleep (antiban/reactionDelay 95)) ;; Sleep to prevent fast actions
+    (antiban/sleepFor (antiban/reactionDelay)) ;; Sleep to prevent fast actions
     walkOrOpen))

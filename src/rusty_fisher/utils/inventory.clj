@@ -1,4 +1,5 @@
-(ns rusty-fisher.utils.inventory)
+(ns rusty-fisher.utils.inventory
+  (:require [rusty-fisher.utils.utilities :as utils]))
 
 (import
  [org.dreambot.api.methods.container.impl Inventory]
@@ -16,7 +17,7 @@
     (if hasItems
       true
       (do
-        (MethodProvider/log "Required equipment not in inventory...")
+        (utils/quitScript "Script stopping. Required items not in inventory...")
         false))))
 
 (defn hasInventorySpace

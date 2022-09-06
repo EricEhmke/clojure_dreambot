@@ -9,7 +9,8 @@
  [org.dreambot.api.methods.interactive NPCs]
  [org.dreambot.api.methods MethodProvider]
  [org.dreambot.api.utilities.impl Condition]
- [org.dreambot.api.methods.input Camera])
+ [org.dreambot.api.methods.input Camera]
+ [java.util Arrays])
 
 (def fishMap
   {:Lobster {:interactCommand ["Cage"] :requiredActions [["Cage" "Harpoon"]] :requiredEquipment ["Lobster pot"]}
@@ -18,14 +19,19 @@
    :Trout {:interactCommand ["Lure"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fly fishing rod" "Feather"]}
    :Salmon {:interactCommand ["Lure"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fly fishing rod" "Feather"]}
    :Pike {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
-   :Tuna {:interactCommand ["Harpoon"] :requiredActions [["Cage" "Harpoon"]] :requiredEquipment ["Harpoon"]}
-   :Swordfish {:interactCommand ["Harpoon"] :requiredActions [["Cage" "Harpoon"]] :requiredEquipment ["Harpoon"]}
-   :Shark {:interactCommand ["Harpoon"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
-   :Sardine {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
-   :Herring {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
-   :Cod {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}
-   :Bass {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}
-   :Mackerel {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}})
+   :Tuna {:interactCommand ["Harpoon"] :requiredActions [["Cage" "Harpoon"] ["Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
+   :Swordfish {:interactCommand ["Harpoon"] :requiredActions [["Cage" "Harpoon"] ["Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
+   :Shark {:interactCommand ["Harpoon"] :requiredActions [["Net" "Harpoon"] ["Big Net" "Harpoon"]] :requiredEquipment ["Harpoon"]}
+   :Sardine {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"] ["Net" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
+   :Herring {:interactCommand ["Bait"] :requiredActions [["Lure" "Bait"] ["Net" "Bait"]] :requiredEquipment ["Fishing rod" "Fishing bait"]}
+   :Cod {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"] ["Big Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}
+   :Bass {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"] ["Big Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}
+   :Mackerel {:interactCommand ["Net"] :requiredActions [["Net" "Harpoon"] ["Big Net" "Harpoon"]] :requiredEquipment ["Big fishing net"]}})
+
+(defn arrayHasItems
+  "Checks if one array contains all items of another array"
+  [array items]
+  (every? #(.contains (Arrays/asList array) %) items))
 
 (defn hasActionFilter
   "Filters NPC that have an actionName in their right-click menu"
@@ -34,7 +40,7 @@
     (match [npc]
       (if (nil? npc)
         false
-        (let [hasAction (some #(.hasAction npc (into-array %)) actionNames)]
+        (let [hasAction (some #(arrayHasItems (.getActions npc) %) actionNames)]
           (if (nil? hasAction)
             false
             true))))))
@@ -68,12 +74,13 @@
           (do
             (MethodProvider/log "Interacted with fishing spot...")
             (when (> 70 (rand-int 100)) (antiban/moveMouseOutOfScreen))
-            (MethodProvider/sleep 3000) ;; Allows time for the client to register a character as moving
+            (antiban/sleepFor 1000) ;; Allows time for the client to register a character as moving
             (MethodProvider/sleepWhile (walk/isTraveling) constants/timeOutTime (antiban/reactionDelayActive))
+            (antiban/sleepFor 9000) ;; Allow time to begin fishing at slow spots (trout/salmon)
             (while (.verify isFishing)
               (when (> (Client/getIdleTime) (antiban/reactionDelay 10))
                 (antiban/antiLogout))
-              (MethodProvider/sleep (antiban/pollingTime 16000 5000)))
+              (antiban/sleepFor (antiban/pollingTime 16000 5000)))
             (utils/clearDialogue) ;; Clear level up or inventory full dialogues
             true)
           false))

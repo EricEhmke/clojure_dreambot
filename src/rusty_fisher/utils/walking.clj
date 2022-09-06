@@ -17,7 +17,7 @@
   "Makes a single action to walk to the destination"
   [destinationArea]
   (let [destinationTile (.getRandomTile destinationArea)]
-    (MethodProvider/sleep (antiban/pollingTime 1500 200)) ;; TODO how fast between clicks to walk?
+    (antiban/sleepFor (+ 1500 (antiban/reactionDelay))) ;; Adding time to sleep to keep from walking too quickyl
     (if (Walking/shouldWalk) ;;TODO: If the tile is local call canwalk and check
       (Walking/walk destinationTile)
       true))) ;; return true to satisfy the behavior tree node as having performed this action
@@ -42,10 +42,10 @@
                      (if (.contains destinationArea (Client/getLocalPlayer))
                        (do
                          (MethodProvider/log "Arrived at destination...")
-                         (MethodProvider/sleep (antiban/pollingTime)))
+                         (antiban/sleepFor (antiban/reactionDelay)))
                        (do
                          (walkNext destinationArea)
-                         (MethodProvider/sleep (antiban/pollingTime 1000 200))
+                         (antiban/sleepFor (antiban/pollingTime 1000 200))
                          (if (= lastLoc (currentLocation))
                            (MethodProvider/log "Aborting: character potentially stuck...")
                            (recur (.getTile (Client/getLocalPlayer)))))))]
